@@ -63,7 +63,13 @@ async function activate(context) {
 	 */
 	context.subscriptions.push(vscode.commands.registerCommand('htw-sonarqube-connector-plugin.setSonarToken', async function () {
 		sonarToken = await vscode.window.showInputBox({ placeHolder: "Gebe deinen SonarQube Token ein:" });
-		vscode.window.showInformationMessage('SonarQube Token wurde hinzugefügt:', sonarToken)
+		let validTokenRequest = await validateToken(baseUrl, sonarToken)
+		if(validTokenRequest.data.valid){
+			vscode.window.showInformationMessage('✅ SonarQube Token wurde hinzugefügt:', sonarToken)
+		} else {
+			sonarToken = null;
+			vscode.window.showWarningMessage("❗ Login mit angegebenem SonarQube Token nicht möglich. ❗")
+		}
 	}));
 
 	/**
@@ -71,7 +77,7 @@ async function activate(context) {
 	 */
 	context.subscriptions.push(vscode.commands.registerCommand('htw-sonarqube-connector-plugin.setImmaNr', async function () {
 		immaNr = await vscode.window.showInputBox({ placeHolder: "Gebe deine Matrikelnummer ein:" });
-		vscode.window.showInformationMessage('SonarQube Token wurde hinzugefügt:', immaNr)
+		vscode.window.showInformationMessage('✅ Matrikelnummer wurde hinzugefügt:', immaNr)
 	}));
 
 	/**
@@ -95,9 +101,9 @@ async function activate(context) {
 				}
 			}
 			if (newProject) {
-				vscode.window.showInformationMessage('Projekte wurden angelegt. 🎉')
+				vscode.window.showInformationMessage('🎉 Projekte wurden angelegt. 🎉')
 			} else {
-				vscode.window.showInformationMessage('Alle Projecte waren bereits angelegt.')
+				vscode.window.showInformationMessage('Alle Projekte waren bereits angelegt.')
 			}
 		}
 	}));
@@ -119,12 +125,14 @@ async function activate(context) {
 				}
 			});
 
+			// Creates QuickPick with projects from user
 			let project = await vscode.window.showQuickPick(projects, {
 				matchOnDetail: true,
 			})
 
 			if (project == null) return;
 
+			// Creates QuickPick with given QualityProfiles
 			let qualityProfile = await vscode.window.showQuickPick(qualityProfiles, {
 				matchOnDetail: true,
 			})
@@ -163,7 +171,7 @@ async function activate(context) {
 			const terminal = vscode.window.createTerminal('Run Analyses')
 			terminal.sendText(cmd)
 			terminal.show()
-			let openInBrowser = await vscode.window.showInformationMessage("Ergebniss im Browser öffnen?", "Öffnen", "Schließen")
+			let openInBrowser = await vscode.window.showInformationMessage("Ergebnis im Browser öffnen?", "Öffnen", "Schließen")
 
 			if (openInBrowser === "Öffnen") vscode.env.openExternal(vscode.Uri.parse(`${baseUrl}/dashboard?id=` + project.label))
 		}
@@ -188,8 +196,7 @@ async function getProjects(baseUrl, token) {
 		}
 	};
 	console.log(config)
-	const res = await axios(config).catch(error => { console.log(error); vscode.window.showErrorMessage(error.message, error.response.data.errors[0].msg) });
-	return res
+	return await axios(config).catch(error => { console.log(error); vscode.window.showErrorMessage(error.message, error.response.data.errors[0].msg) });
 }
 
 /**
@@ -229,8 +236,19 @@ async function createProjects(baseUrl, token, projectName) {
 			'Authorization': `Basic ${Buffer.from(token + ':', 'utf-8').toString('base64')}`
 		}
 	}
-	let res = await axios(config).catch(error => { vscode.window.showErrorMessage(error.message, error.response.data.errors[0].msg) });
-	return (res)
+	return await axios(config).catch(error => { vscode.window.showErrorMessage(error.message, error.response.data.errors[0].msg) });
+}
+
+async function validateToken(baseUrl, token) {
+	let config = {
+		method: 'get',
+		maxBodyLength: Infinity,
+		url: `${baseUrl}/api/authentication/validate`,
+		headers: {
+			'Authorization': `Basic ${Buffer.from(token + ':', 'utf-8').toString('base64')}`
+		}
+	}
+	return await axios(config).catch(error => { vscode.window.showErrorMessage(error.message, error.response.data.errors[0].msg) });
 }
 
 module.exports = {
