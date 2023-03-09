@@ -1,34 +1,196 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
-
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+const axios = require('axios');
 
 /**
  * @param {vscode.ExtensionContext} context
  */
-function activate(context) {
+async function activate(context) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "htw-sonarqube-connector-plugin" is now active!');
+	// const baseUrl = 'http://localhost:9000'
+	const baseUrl = 'https://nico-teichert.tech'
+	let sonarToken = null;
+	let immaNr = null;
+	let projects = null;
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('htw-sonarqube-connector-plugin.helloWorld', function () {
-		// The code you place here will be executed every time your command is executed
+	const aufgaben = [
+		{
+			label: 'Aufgabe 1',
+			key: 'Aufgabe-1'
+		},
+		{
+			label: 'Aufgabe 2',
+			key: 'Aufgabe-2'
+		},
+		{
+			label: 'Aufgabe 3',
+			key: 'Aufgabe-3'
+		}
+	]
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from HTW-SonarQube-Connector-Plugin!');
-	});
+	const qualityProfiles = [
+		{
+			label: "Aufgabe 1 - Standard",
+			key: "HTW Aufgabe 1 - Standard"
+		},
+		{
+			label: "Aufgabe 1 - Detailed",
+			key: "HTW Aufgabe 1 - Detailed"
+		},
+		{
+			label: "Aufgabe 2 - Standard",
+			key: "HTW Aufgabe 2 - Standard"
+		},
+		{
+			label: "Aufgabe 2 - Detailed",
+			key: "HTW Aufgabe 2 - Detailed"
+		},
+		{
+			label: "Aufgabe 3 - Standard",
+			key: "HTW Aufgabe 3 - Standard"
+		},
+		{
+			label: "Aufgabe 3 - Detailed",
+			key: "HTW Aufgabe 3 - Detailed"
+		}
+	]
 
-	context.subscriptions.push(disposable);
+	console.log('ACTIVATED');
+
+	context.subscriptions.push(vscode.commands.registerCommand('htw-sonarqube-connector-plugin.setSonarToken', async function () {
+		sonarToken = await vscode.window.showInputBox({ placeHolder: "Gebe deinen SonarQube Token ein:" });
+		vscode.window.showInformationMessage('SonarQube Token wurde hinzugefügt:', sonarToken)
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('htw-sonarqube-connector-plugin.setImmaNr', async function () {
+		immaNr = await vscode.window.showInputBox({ placeHolder: "Gebe deine Matrikelnummer ein:" });
+		vscode.window.showInformationMessage('SonarQube Token wurde hinzugefügt:', immaNr)
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('htw-sonarqube-connector-plugin.initializeProjects', async function () {
+		if (sonarToken === null || immaNr === null) {
+			vscode.window.showWarningMessage("SonarQube Token oder Matrikelnummer ist nicht angegeben.")
+		} else {
+			let newProject = false;
+			for (aufgabe of aufgaben) {
+				let projectName = immaNr + '_' + aufgabe.key
+				let res = await createProjects(baseUrl, sonarToken, projectName)
+				console.log(res)
+				if (res) {
+					newProject = true
+					let qualityProfile = `HTW ${aufgabe.label} - Standard`
+					await setQualityProfile(baseUrl, sonarToken, projectName, qualityProfile)
+				}
+			}
+			if(newProject){
+				vscode.window.showInformationMessage('Projekte wurden angelegt. 🎉')
+			} else {
+				vscode.window.showInformationMessage('Alle Projecte waren bereits angelegt.')
+			}
+		}
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('htw-sonarqube-connector-plugin.setQualityProfile', async function () {
+		if (sonarToken === null || immaNr === null) {
+			vscode.window.showWarningMessage("SonarQube Token oder Matrikelnummer ist nicht angegeben.")
+		} else {
+			let res = await getProjects(baseUrl, sonarToken);
+			console.log(res)
+			projects = res.data.components.map(project => {
+				return {
+					label: project.key,
+					detail: project.name.replace(immaNr+'_', '')
+				}
+			});
+
+			let project = await vscode.window.showQuickPick(projects, {
+				matchOnDetail: true,
+			})
+
+			if (project == null) return;
+
+			let qualityProfile = await vscode.window.showQuickPick(qualityProfiles, {
+				matchOnDetail: true,
+			})
+
+			if (qualityProfile == null) return;
+
+			await setQualityProfile(baseUrl, sonarToken, project.label, qualityProfile.key)
+		}
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('htw-sonarqube-connector-plugin.runAnalysis', async function () {
+		if (sonarToken === null || immaNr === null) {
+			vscode.window.showWarningMessage("SonarQube Token oder Matrikelnummer ist nicht angegeben.")
+		} else {
+			let res = await getProjects(baseUrl, sonarToken);
+			console.log(res)
+			projects = res.data.components.map(project => {
+				return {
+					label: project.key,
+					detail: project.name
+				}
+			});
+
+			let project = await vscode.window.showQuickPick(projects, {
+				matchOnDetail: true,
+			})
+
+			if (project == null) return;
+
+			let cmd = `sonar-scanner.bat -D"sonar.projectKey=${project.label}" -D"sonar.sources=src" -D"sonar.java.binaries=bin" -D"sonar.host.url=${baseUrl}" -D"sonar.login=${sonarToken}"`
+
+			const terminal = vscode.window.createTerminal('Run Analyses')
+			terminal.sendText(cmd)
+			terminal.show()
+			let openInBrowser = await vscode.window.showInformationMessage("Ergebniss im Browser öffnen?", "Öffnen", "Schließen")
+
+			if (openInBrowser === "Öffnen") vscode.env.openExternal(vscode.Uri.parse(`${baseUrl}/dashboard?id=` + project.label))
+		}
+	}));
 }
 
-// This method is called when your extension is deactivated
-function deactivate() {}
+function deactivate() { }
+
+async function getProjects(baseUrl, token) {
+	const config = {
+		method: 'post',
+		maxBodyLength: Infinity,
+		url: `${baseUrl}/api/components/search?qualifiers=TRK`,
+		headers: {
+			'Authorization': `Basic ${Buffer.from(token + ':', 'utf-8').toString('base64')}`
+		}
+	};
+	console.log(config)
+	const res = await axios(config).catch(error => { console.log(error); vscode.window.showErrorMessage(error.message, error.response.data.errors[0].msg) });
+	return res
+}
+
+async function setQualityProfile(baseUrl, token, projectName, qualityProfile) {
+	var config = {
+		method: 'post',
+		maxBodyLength: Infinity,
+		url: `${baseUrl}/api/qualityprofiles/add_project?language=java&project=${projectName}&qualityProfile=${qualityProfile}`,
+		headers: {
+			'Authorization': `Basic ${Buffer.from(token + ':', 'utf-8').toString('base64')}`
+		}
+	};
+	let res = await axios(config).catch(error => { console.log(error); vscode.window.showErrorMessage(error.message, error.response.data.errors[0].msg) });
+	console.log(res)
+}
+
+async function createProjects(baseUrl, token, projectName) {
+	console.log(projectName)
+	let config = {
+		method: 'post',
+		maxBodyLength: Infinity,
+		url: `${baseUrl}/api/projects/create?name=${projectName}&project=${projectName}`,
+		headers: {
+			'Authorization': `Basic ${Buffer.from(token + ':', 'utf-8').toString('base64')}`
+		}
+	}
+	let res = await axios(config).catch(error => { vscode.window.showErrorMessage(error.message, error.response.data.errors[0].msg) });
+	return (res)
+}
 
 module.exports = {
 	activate,
