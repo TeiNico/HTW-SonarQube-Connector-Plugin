@@ -12,6 +12,7 @@ async function activate(context) {
 	let immaNr = null;
 	let projects = null;
 
+	// Sample tasks
 	const aufgaben = [
 		{
 			label: 'Aufgabe 1',
@@ -27,6 +28,7 @@ async function activate(context) {
 		}
 	]
 
+	// Existing QualityProfiles in SonarQube
 	const qualityProfiles = [
 		{
 			label: "Aufgabe 1 - Standard",
@@ -56,19 +58,30 @@ async function activate(context) {
 
 	console.log('ACTIVATED');
 
+	/**
+	 * Command to set the SonarQube Token in VSCode
+	 */
 	context.subscriptions.push(vscode.commands.registerCommand('htw-sonarqube-connector-plugin.setSonarToken', async function () {
 		sonarToken = await vscode.window.showInputBox({ placeHolder: "Gebe deinen SonarQube Token ein:" });
 		vscode.window.showInformationMessage('SonarQube Token wurde hinzugefügt:', sonarToken)
 	}));
 
+	/**
+	 * Command to set the registration number in VSCode
+	 */
 	context.subscriptions.push(vscode.commands.registerCommand('htw-sonarqube-connector-plugin.setImmaNr', async function () {
 		immaNr = await vscode.window.showInputBox({ placeHolder: "Gebe deine Matrikelnummer ein:" });
 		vscode.window.showInformationMessage('SonarQube Token wurde hinzugefügt:', immaNr)
 	}));
 
+	/**
+	 * Command to initialize all sample projects (Aufgabe 1 - Aufgabe 3)
+	 * Skip if they already exist in SonarQube
+	 */
 	context.subscriptions.push(vscode.commands.registerCommand('htw-sonarqube-connector-plugin.initializeProjects', async function () {
 		if (sonarToken === null || immaNr === null) {
-			vscode.window.showWarningMessage("SonarQube Token oder Matrikelnummer ist nicht angegeben.")
+			if (sonarToken === null) vscode.window.showWarningMessage("❗ Gib deinen SonarQube Token an. ❗")
+			if (immaNr === null) vscode.window.showWarningMessage("❗ Gib deine Matrikelnummer an. ❗")
 		} else {
 			let newProject = false;
 			for (aufgabe of aufgaben) {
@@ -81,7 +94,7 @@ async function activate(context) {
 					await setQualityProfile(baseUrl, sonarToken, projectName, qualityProfile)
 				}
 			}
-			if(newProject){
+			if (newProject) {
 				vscode.window.showInformationMessage('Projekte wurden angelegt. 🎉')
 			} else {
 				vscode.window.showInformationMessage('Alle Projecte waren bereits angelegt.')
@@ -89,16 +102,20 @@ async function activate(context) {
 		}
 	}));
 
+	/**
+	 * Command for setting a chosen qualityprofile for a chosen project in SonarQube
+	 */
 	context.subscriptions.push(vscode.commands.registerCommand('htw-sonarqube-connector-plugin.setQualityProfile', async function () {
 		if (sonarToken === null || immaNr === null) {
-			vscode.window.showWarningMessage("SonarQube Token oder Matrikelnummer ist nicht angegeben.")
+			if (sonarToken === null) vscode.window.showWarningMessage("❗ Gib deinen SonarQube Token an. ❗")
+			if (immaNr === null) vscode.window.showWarningMessage("❗ Gib deine Matrikelnummer an. ❗")
 		} else {
 			let res = await getProjects(baseUrl, sonarToken);
 			console.log(res)
 			projects = res.data.components.map(project => {
 				return {
 					label: project.key,
-					detail: project.name.replace(immaNr+'_', '')
+					detail: project.name.replace(immaNr + '_', '')
 				}
 			});
 
@@ -118,9 +135,13 @@ async function activate(context) {
 		}
 	}));
 
+	/**
+	 * Command to run a code analysis in SonarQube
+	 */
 	context.subscriptions.push(vscode.commands.registerCommand('htw-sonarqube-connector-plugin.runAnalysis', async function () {
 		if (sonarToken === null || immaNr === null) {
-			vscode.window.showWarningMessage("SonarQube Token oder Matrikelnummer ist nicht angegeben.")
+			if (sonarToken === null) vscode.window.showWarningMessage("❗ Gib deinen SonarQube Token an. ❗")
+			if (immaNr === null) vscode.window.showWarningMessage("❗ Gib deine Matrikelnummer an. ❗")
 		} else {
 			let res = await getProjects(baseUrl, sonarToken);
 			console.log(res)
@@ -151,6 +172,12 @@ async function activate(context) {
 
 function deactivate() { }
 
+/**
+ * Function to get all projects from specific user
+ * @param {*} baseUrl 
+ * @param {*} token 
+ * @returns user projects
+ */
 async function getProjects(baseUrl, token) {
 	const config = {
 		method: 'post',
@@ -165,6 +192,13 @@ async function getProjects(baseUrl, token) {
 	return res
 }
 
+/**
+ * Function which sets the QualityProfile for specific project
+ * @param {*} baseUrl 
+ * @param {*} token 
+ * @param {*} projectName 
+ * @param {*} qualityProfile 
+ */
 async function setQualityProfile(baseUrl, token, projectName, qualityProfile) {
 	var config = {
 		method: 'post',
@@ -178,6 +212,13 @@ async function setQualityProfile(baseUrl, token, projectName, qualityProfile) {
 	console.log(res)
 }
 
+/**
+ * Function for creating a project in SonarQube
+ * @param {*} baseUrl 
+ * @param {*} token 
+ * @param {*} projectName 
+ * @returns 
+ */
 async function createProjects(baseUrl, token, projectName) {
 	console.log(projectName)
 	let config = {
