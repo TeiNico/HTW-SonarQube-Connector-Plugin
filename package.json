@@ -14,7 +14,8 @@
     "onCommand:htw-sonarqube-connector-plugin.setImmaNr",
     "onCommand:htw-sonarqube-connector-plugin.setQualityProfile",
     "onCommand:htw-sonarqube-connector-plugin.initializeProjects",
-    "onCommand:htw-sonarqube-connector-plugin.runAnalysis"
+    "onCommand:htw-sonarqube-connector-plugin.runAnalysis",
+    "onCommand:htw-sonarqube-connector-plugin.activatePlugin"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -43,6 +44,11 @@
         "command": "htw-sonarqube-connector-plugin.runAnalysis",
         "category": "HTW",
         "title": "Analyse durchführen"
+      },
+      {
+        "command": "htw-sonarqube-connector-plugin.activatePlugin",
+        "category": "HTW",
+        "title": "Plugin aktivieren ✅"
       }
     ]
   },
