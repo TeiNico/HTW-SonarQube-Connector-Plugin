@@ -61,15 +61,15 @@ In der folgenden Tabelle können die unterschiedlichen Funktionen, sowie eine da
 
 |Nr.|Titel des Befehls|Kurzbeschreibung|Input|
 |:---:|---|---|---|
-|1.|Plugin aktivieren ✅|...|...|
-|2.|SonarQube Token eingeben|...|...|
-|3.|Matrikelnummer eingeben|...|...|
-|4.|Erstelle Projekte in SonarQube|...|...|
-|5.|Setze QualityProfile für Projekt|...|...|
-|6.|Analyse durchführen|...|...|
+|1.|Plugin aktivieren ✅|- Aktiviert das Plugin<br>- Zeigt die Felder in der Statusbar an||
+|2.|SonarQube Token eingeben|- Hinterlegt den SonarQube Token im VSCode Plugin<br>- Überprüft die Gültigkeit des eingegebenen Tokens|- SoarQube Token|
+|3.|Matrikelnummer eingeben|- Hinterlegt die Matrikelnummer im VSCode Plugin<br>-Validiert lediglich das Format der Matrikelnummer|- Matrikelnummer|
+|4.|Erstelle Projekte in SonarQube|Erstellt automatisch 3 Projekte in SonarQube:<br>- \<Matrikelnummer>_Aufgabe-1<br>- \<Matrikelnummer>_Aufgabe-2<br>- \<Matrikelnummer>_Aufgabe-3<br>- Verknüpft die zugehörigen Qualitätsprofile mit den erstellten Projekten||
+|5.|Setze QualityProfile für Projekt|Verändert das in SonarQube hinterlegte Qualitätsprofil im ausgewählten Projekt|- SonarQube Projekt<br>- Qualitätsprofil|
+|6.|Analyse durchführen|Führt eine Analyse des aktuell in VSCode geöffneten Projekts für das ausgewählte SonarQube Projekt durch|- sonar-scanner.bat<br>- Projekt|
 
-Die definierten Funktionen hinter den Befehlen verwenden im die offizielle [API-Schnittstelle von SonarQube](https://next.sonarqube.com/sonarqube/web_api/api/alm_integrations).
-Um die Analyse durchführen zu können, wird ein zusätzliches Paket benötigt. Dieses können Sie sich [hier herunterladen]().
+Die definierten Funktionen hinter den Befehlen verwenden im die offizielle [API-Schnittstelle von SonarQube](https://next.sonarqube.com/sonarqube/web_api/api/alm_integrations). Um die Funktionalitäten vollumfänglich nutzen zu können, muss die Matrikelnummer, als auch der SonarQube Token im Plugin hinterlegt werden
+Um die Analyse durchführen zu können (Nr. 6), wird ein zusätzliches Paket benötigt. Dieses können Sie sich [hier herunterladen]().
 
 ## Bedienung
 
