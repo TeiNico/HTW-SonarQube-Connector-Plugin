@@ -76,7 +76,7 @@ In der folgenden Tabelle können die unterschiedlichen Funktionen, sowie eine da
 
 Die definierten Funktionen hinter den Befehlen verwenden im die offizielle [API-Schnittstelle von SonarQube](https://next.sonarqube.com/sonarqube/web_api/api/alm_integrations).<br>
 Um die Funktionalitäten vollumfänglich nutzen zu können, muss die Matrikelnummer, als auch der SonarQube Token im Plugin hinterlegt werden.<br>
-Um die Analyse durchführen zu können (Nr. 6), wird ein zusätzliches Paket benötigt. Dieses können Sie sich [hier herunterladen]().
+Um die Analyse durchführen zu können (Nr. 6), wird ein zusätzliches Paket benötigt. Dieses können Sie sich [hier herunterladen](https://docs.sonarqube.org/latest/analyzing-source-code/scanners/sonarscanner/).
 
 ## Bedienung
 
@@ -156,12 +156,12 @@ Mit einem Klick auf das enstprechende Profil, bzw. mit der Bestätigung der Ausw
 
 ### Nr. 6
 
-Um eine Analyse durchführen zu können, muss ein zusätzliches Paket heruntergeladen werden.
+Um eine Analyse durchführen zu können, muss ein zusätzliches [Paket](https://docs.sonarqube.org/latest/analyzing-source-code/scanners/sonarscanner/) heruntergeladen werden.
 Anschließend kann der Befehl **Analyse durchführen** über die Befehlspalette, oder aber über den Button **"Analyse durchführen"** gestartet werden.
 
 ![image](https://user-images.githubusercontent.com/40828962/225767378-d7f8313b-5006-4ce7-884c-8c8c0df42fa2.png)
 
-Anschließend öffnet sich der FileExplorer, indem die **sonar-scanner.bat** Datei ausgewählt werden muss.
+Es öffnet sich der FileExplorer, indem die **sonar-scanner.bat** Datei ausgewählt werden muss.
 
 ![image](https://user-images.githubusercontent.com/40828962/225767885-eaadaf17-f6a6-4a21-910c-d2668aa7b24e.png)
 
