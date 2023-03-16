@@ -9,7 +9,7 @@ Diese können hier eingesehen werden:
 - [Java Regeln für Aufgabe 1](https://github.com/TeiNico/HTW-Java-Rules-Aufgabe_1)
 
 
-## Installation
+## Plugin starten
 
 ### Voraussetzung
 
