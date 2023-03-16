@@ -170,3 +170,8 @@ Zudem werden alle vorhanden Projekte des Nutzers vom SonarQube Server geladen un
 Im Anschluss wird das in VSCode geöffnete Projekt, mit dem ausgewähltem SonarQube Projekt überprüft. Dabei öffnet sich ein Terminal mit dem Namen **Run Analyses**, in dem man den Status der Analyse verfolgen kann. In dem Terminal sollte zum Schluss die Meldung **EXECUTION SUCCESS** ausgegeben werden. Zudem erscheint die Meldung **Ergebnis im Browser öffnen?**. Durch einen Klick auf den **Öffnen** Button, wird dann das entsprechende Projekt in SonarQube geöffnet.
 
 ![image](https://user-images.githubusercontent.com/40828962/225769198-539a8adc-7536-4395-b411-5a80bcdf9a53.png)
+
+Der Nutzer hat anschließend die Möglichkeit die Analyse Ergebnisse auf dem SonarQube Server einzusehen.
+
+![image](https://user-images.githubusercontent.com/40828962/225769565-8a0e5b12-3fb2-4326-9cb3-07a91a1f3ef1.png)
+
