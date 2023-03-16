@@ -63,10 +63,10 @@ In der folgenden Tabelle können die unterschiedlichen Funktionen, sowie eine da
 |:---:|---|---|---|
 |[1.](#nr-1)|Plugin aktivieren ✅|- Aktiviert das Plugin<br>- Zeigt die Felder in der Statusbar an||
 |[2.](#nr-2)|SonarQube Token eingeben|- Hinterlegt den SonarQube Token im VSCode Plugin<br>- Überprüft die Gültigkeit des eingegebenen Tokens|- SoarQube Token|
-|3.|Matrikelnummer eingeben|- Hinterlegt die Matrikelnummer im VSCode Plugin<br>-Validiert lediglich das Format der Matrikelnummer|- Matrikelnummer|
-|4.|Erstelle Projekte in SonarQube|Erstellt automatisch 3 Projekte in SonarQube:<br>- \<Matrikelnummer>_Aufgabe-1<br>- \<Matrikelnummer>_Aufgabe-2<br>- \<Matrikelnummer>_Aufgabe-3<br>- Verknüpft die zugehörigen Qualitätsprofile mit den erstellten Projekten||
-|5.|Setze QualityProfile für Projekt|Verändert das in SonarQube hinterlegte Qualitätsprofil im ausgewählten Projekt|- SonarQube Projekt<br>- Qualitätsprofil|
-|6.|Analyse durchführen|Führt eine Analyse des aktuell in VSCode geöffneten Projekts für das ausgewählte SonarQube Projekt durch|- sonar-scanner.bat<br>- Projekt|
+|[3.](#nr-3)|Matrikelnummer eingeben|- Hinterlegt die Matrikelnummer im VSCode Plugin<br>-Validiert lediglich das Format der Matrikelnummer|- Matrikelnummer|
+|[4.](#nr-4)|Erstelle Projekte in SonarQube|Erstellt automatisch 3 Projekte in SonarQube:<br>- \<Matrikelnummer>_Aufgabe-1<br>- \<Matrikelnummer>_Aufgabe-2<br>- \<Matrikelnummer>_Aufgabe-3<br>- Verknüpft die zugehörigen Qualitätsprofile mit den erstellten Projekten||
+|[5.](#nr-5)|Setze QualityProfile für Projekt|Verändert das in SonarQube hinterlegte Qualitätsprofil im ausgewählten Projekt|- SonarQube Projekt<br>- Qualitätsprofil|
+|[6.](#nr-6)|Analyse durchführen|Führt eine Analyse des aktuell in VSCode geöffneten Projekts für das ausgewählte SonarQube Projekt durch|- sonar-scanner.bat<br>- Projekt|
 
 Die definierten Funktionen hinter den Befehlen verwenden im die offizielle [API-Schnittstelle von SonarQube](https://next.sonarqube.com/sonarqube/web_api/api/alm_integrations).<br>
 Um die Funktionalitäten vollumfänglich nutzen zu können, muss die Matrikelnummer, als auch der SonarQube Token im Plugin hinterlegt werden.<br>
@@ -74,10 +74,10 @@ Um die Analyse durchführen zu können (Nr. 6), wird ein zusätzliches Paket ben
 
 ## Bedienung
 
-#### Nr. 1 
-Die Aktivierung des Plugins muss wie [oben](#anleitung) beschrieben durchgeführt werden.
+### Nr. 1 
+Die Aktivierung des Plugins muss wie [in Punkt 9 und 10](#anleitung) beschrieben durchgeführt werden.
 
-#### Nr. 2
+### Nr. 2
 Der SonarQube Token muss zur Authentifizierung auf dem SonarQube Server im Plugin hinterlegt werden. 
 Der Token kann nach erofolgreichem Login auf dem SonarQube Server unter dem Menüpunkt **My Account** > **Security**, mit **Generate** angelegt werden.
 Mehr Informationen finden Sie [hier](https://docs.sonarqube.org/8.9/user-guide/user-account/generating-and-using-tokens/).
@@ -98,18 +98,75 @@ Wenn der Token ungültig ist, erscheint die Meldung **"❗ Login mit dem angegeb
 
 ![image](https://user-images.githubusercontent.com/40828962/225732612-4532b654-7990-4f11-99bf-3c2479622401.png)
 
-Wenn der Token gültig ist, erscheint die Meldung **"✅ SonarQube Token wurde hinzugefügt:"**. Zudem ändert sich in der Statusbar der Status des SonarQube Tokens von **"❌"** zu **"✅"**.
+Wenn der Token gültig ist, erscheint die Meldung **"✅ SonarQube Token wurde hinzugefügt:"**. Zudem ändert sich in der Statusbar der Status des **SonarQube Tokens** von **"❌"** zu **"✅"**.
 
 ![image](https://user-images.githubusercontent.com/40828962/225733275-3d3c9a6f-cef7-4b2c-babb-3056690d8113.png)
 
-#### Nr. 3
+### Nr. 3
+Die Matrikelnummer muss im Plugin hinterlegt werden. Der dazugehörige Befehl kann über die Befehlspalette, oder aber mit einem Klick auf den Button **Matrikelnummer** in der Statusbar, ausgeführt werden.
 
-#### Nr. 4
+![image](https://user-images.githubusercontent.com/40828962/225754304-b5d72af7-f16e-46d6-a9b9-1e5f930053be.png)
 
-#### Nr. 5
+Anschließend muss die Matrikelnummer Token in der Eingabeaufforderung eingegeben werden.
 
-#### Nr. 6
+![image](https://user-images.githubusercontent.com/40828962/225754786-894cdc60-f66e-4476-81b1-15e89059e6fe.png)
 
-#### Nr. 7
+Wenn die Matrikelnummer nicht dem Muster **s0XXXXXX** entspricht, wird die Fehlermeldung **❗ Matrikelnummer nicht gültig.❗** ausgegeben.
 
+![image](https://user-images.githubusercontent.com/40828962/225755215-825729e3-c9aa-41b7-95f5-2342ecf961bc.png)
 
+Wenn die Matrikelnummer gültig ist, erscheint die Meldung **"✅ Matrikelnummer wurde hinzugefügt:"**. Zudem ändert sich in der Statusbar der Status der **Matrikelnummer** von **"❌"** zu **"\<Matrikelnummer> ✅"**.
+
+![image](https://user-images.githubusercontent.com/40828962/225755788-61fbf4ad-3761-4a0f-85a4-28f0e4d3e2ef.png)
+
+Wenn die **Matrikelnummer**, als auch der **SonarQube Token** gesetzt sind, ändert sich der Status von **QualityProfil ändern** von **"❌"** zu **"🕵️‍♂️"**. Außerdem erscheint der Button **"Projekte erstellen 🔨"** in der Statusbar.
+
+### Nr. 4
+Um Projekte in SonarQube zu erstellen und die richtigen Qualitätsprofile automatisch zu hinterlegen, muss der Befehl **Erstelle Projekte in SonarQube** ausgeführt werden. Dies kann über die Befehlspalette, oder aber mit einem Klick auf den Button **"Projekte erstellen 🔨"** in der Statusbar, ausgeführt werden.
+
+![image](https://user-images.githubusercontent.com/40828962/225757732-aa64fb76-b96e-4cac-a2a1-98cb7457fbdd.png)
+
+Wenn mindestens eines der Projekte angelegt werden kann, erscheint die Meldung **🎉 Projekte wurden angelegt. 🎉**. Wenn ein Projekt nicht angelegt werden konnte, weil es schon existiert, erscheint die Meldung **❌ Request failed with status code 400**.
+
+Die angelegten Projekte können anschließend im SonarQube Server unter dem Punkt **Projects** eingesehen werden.
+
+![image](https://user-images.githubusercontent.com/40828962/225758699-cf36344f-7259-4a38-8a9b-1f552a7b1037.png)
+
+### Nr. 5
+
+Um das Qualitätsprofil eines Projekts zu verändern, kann der Befehl **Setze QualityProfile für Projekt** genutzt werden. Diese ist über die Befehlspalette, oder aber über de Button **"QualityProfil ändern 🕵️‍♂️"** aufzurufen.
+
+![image](https://user-images.githubusercontent.com/40828962/225761027-81a3993a-5e34-4070-9ec8-ba7c70624d7b.png)
+
+Anschließend werden alle vorhanden Projekte des Nutzers vom SonarQube Server geladen und zur Auswahl in VSCode bereitgestellt. Die Auswahl kann durch ein Klick mit der linken Maustaste auf des entsprechende Projekt, oder aber durch drücken der **ENTER** Taste, bestätigt werden.
+
+![image](https://user-images.githubusercontent.com/40828962/225762528-ec163a0c-a55b-45f8-8cbc-71ba73952a42.png)
+
+Wenn ein [automatisch erstelltes Projekt](#nr-4) ausgewählt wird, werden im Anschluss zwei Qualitätsprofile zur Auswahl bereitgestellt. Dabei handelt sich um die für das Projekt spezifisch entwickelten Qualitätsprofile in der **Standard** und **Detailed** Version. Wenn ein anderes Projekt ausgewählt wird, kann der Nutzer aus allen auf dem SonarQube Server zugänglichen Qualitätsprojekten auswählen.
+
+![image](https://user-images.githubusercontent.com/40828962/225764809-6e7f44e1-a916-405c-9430-552bca42ae91.png)
+
+Mit einem Klick auf das enstprechende Profil, bzw. mit der Bestätigung der Auswahl durch das drücken von der Taste **Enter**, wird das Qualitätsprofil für das Projekt gesetzt.
+
+### Nr. 6
+
+Um eine Analyse durchführen zu können, muss ein zusätzliches Paket heruntergeladen werden.
+Anschließend kann der Befehl **Analyse durchführen** über die Befehlspalette, oder aber über den Button **"Analyse durchführen"** gestartet werden.
+
+![image](https://user-images.githubusercontent.com/40828962/225767378-d7f8313b-5006-4ce7-884c-8c8c0df42fa2.png)
+
+Anschließend öffnet sich der FileExplorer, indem die **sonar-scanner.bat** Datei ausgewählt werden muss.
+
+![image](https://user-images.githubusercontent.com/40828962/225767885-eaadaf17-f6a6-4a21-910c-d2668aa7b24e.png)
+
+Wenn die richtige Datei ausgewählt wird, ändert sich der Status von **Analyse durchführen** von **❌** zu **🚀**.
+
+![image](https://user-images.githubusercontent.com/40828962/225768232-7bda5eef-8d14-4ab5-9d11-ab28ee77ab7d.png)
+
+Zudem werden alle vorhanden Projekte des Nutzers vom SonarQube Server geladen und zur Auswahl in VSCode bereitgestellt. Die Auswahl kann durch ein Klick mit der linken Maustaste auf des entsprechende Projekt, oder aber durch drücken der **ENTER** Taste, bestätigt werden.
+
+![image](https://user-images.githubusercontent.com/40828962/225762528-ec163a0c-a55b-45f8-8cbc-71ba73952a42.png)
+
+Im Anschluss wird das in VSCode geöffnete Projekt, mit dem ausgewähltem SonarQube Projekt überprüft. Dabei öffnet sich ein Terminal mit dem Namen **Run Analyses**, in dem man den Status der Analyse verfolgen kann. In dem Terminal sollte zum Schluss die Meldung **EXECUTION SUCCESS** ausgegeben werden. Zudem erscheint die Meldung **Ergebnis im Browser öffnen?**. Durch einen Klick auf den **Öffnen** Button, wird dann das entsprechende Projekt in SonarQube geöffnet.
+
+![image](https://user-images.githubusercontent.com/40828962/225769198-539a8adc-7536-4395-b411-5a80bcdf9a53.png)
