@@ -14,6 +14,7 @@ Diese können hier eingesehen werden:
 ### Voraussetzung
 
 - [Visual Studio Code](https://code.visualstudio.com/)
+- [SonarLint Extension](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode)
 - [git](https://git-scm.com/book/de/v2/Erste-Schritte-Git-installieren)
 - [Node.js](https://nodejs.org/de)
 
