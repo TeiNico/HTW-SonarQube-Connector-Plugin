@@ -3,6 +3,12 @@
 Dieses VSCode Plugin wurde im Rahmen einer Masterarbeit entwickelt.
 Es bietet eine Schnittstelle zwischen VSCode und dem SonarQube-Server unter der Domain https://nico-teichert.tech.
 
+Im Rahmen der Masterarbeit sind zudem zwei weitere Repositories entstanden, welche benutzerdefinierte Regeln für den SonarQube Server beinhalten.
+Diese können hier eingesehen werden:
+- [Generelle Java Regeln](https://github.com/TeiNico/HTW-Java-Rules-General)
+- [Java Regeln für Aufgabe 1](https://github.com/TeiNico/HTW-Java-Rules-Aufgabe_1)
+
+
 ## Installation
 
 ### Voraussetzung
