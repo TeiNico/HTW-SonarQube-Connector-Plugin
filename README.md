@@ -71,9 +71,9 @@ In der folgenden Tabelle können die unterschiedlichen Funktionen, sowie eine da
 |[1.](#nr-1)|Plugin aktivieren ✅|- Aktiviert das Plugin<br>- Zeigt die Felder in der Statusbar an||
 |[2.](#nr-2)|SonarQube Token eingeben|- Hinterlegt den SonarQube Token im VSCode Plugin<br>- Überprüft die Gültigkeit des eingegebenen Tokens|- SoarQube Token|
 |[3.](#nr-3)|Matrikelnummer eingeben|- Hinterlegt die Matrikelnummer im VSCode Plugin<br>-Validiert lediglich das Format der Matrikelnummer|- Matrikelnummer|
-|[4.](#nr-4)|Erstelle Projekte in SonarQube|Erstellt automatisch 3 Projekte in SonarQube:<br>- \<Matrikelnummer>_Aufgabe-1<br>- \<Matrikelnummer>_Aufgabe-2<br>- \<Matrikelnummer>_Aufgabe-3<br>- Verknüpft die zugehörigen Qualitätsprofile mit den erstellten Projekten||
-|[5.](#nr-5)|Setze QualityProfile für Projekt|Verändert das in SonarQube hinterlegte Qualitätsprofil im ausgewählten Projekt|- SonarQube Projekt<br>- Qualitätsprofil|
-|[6.](#nr-6)|Analyse durchführen|Führt eine Analyse des aktuell in VSCode geöffneten Projekts für das ausgewählte SonarQube Projekt durch|- sonar-scanner.bat<br>- Projekt|
+|[4.](#nr-4)|Erstelle Projekte in SonarQube|Erstellt automatisch 3 Projekte in SonarQube:<br>- \<Matrikelnummer>_Aufgabe-1<br>- \<Matrikelnummer>_Aufgabe-2<br>- \<Matrikelnummer>_Aufgabe-3<br>- Verknüpft die zugehörigen Qualitätsprofile||
+|[5.](#nr-5)|Setze QualityProfile für Projekt|Verändert das in SonarQube hinterlegte Qualitätsprofil<br>im ausgewählten Projekt|- SonarQube Projekt<br>- Qualitätsprofil|
+|[6.](#nr-6)|Analyse durchführen|Führt eine Analyse des aktuell in VSCode geöffneten Projekts<br>für das ausgewählte SonarQube Projekt durch|- sonar-scanner.bat<br>- Projekt|
 
 Die definierten Funktionen hinter den Befehlen verwenden im die offizielle [API-Schnittstelle von SonarQube](https://next.sonarqube.com/sonarqube/web_api/api/alm_integrations).<br>
 Um die Funktionalitäten vollumfänglich nutzen zu können, muss die Matrikelnummer, als auch der SonarQube Token im Plugin hinterlegt werden.<br>
